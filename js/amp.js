@@ -1,22 +1,16 @@
 var song;
 var amp;
 var button;
-var score = [];
+
 var amphistory = [];
-
-/** styles */
-var backgroundColor = 0;
-var contentColor = 255;
-var myFont;
-
 function preload() {
-  myFont = loadFont("Share_Tech_Mono/ShareTechMono-Regular.ttf");
+  loadFont("Share_Tech_Mono/ShareTechMono-Regular.ttf");
   song = loadSound("sounds/song.wav");
 }
 
 function setup() {
   // create an interface to change frequency, waveform, etc.
-  let myCanvas = createCanvas(windowWidth * 0.99, windowHeight * 0.9);
+  let myCanvas = createCanvas(400, 200);
   myCanvas.id("my-canvas");
   angleMode(DEGREES);
   slider = createSlider(0, 100, 100);
@@ -25,29 +19,14 @@ function setup() {
 
   song.play();
   amp = new p5.Amplitude();
-  score.push(new Canvas(20));
-
-  textFont(myFont);
-  textSize(15);
-  textAlign(CENTER, CENTER);
-}
-
-https: function draw() {
-  song.setVolume(slider.value() / 100);
-  background(backgroundColor);
-  drawScore();
-}
-
-function drawScore() {
-  for (let i = 0; i < score.length; i++) {
-    score[i].drawSelf();
-  }
 }
 
 //www.youtube.com/watch?v=h_aTgOl9J5I&list=PLRqwX-V7Uu6aFcVjlDAkkGIixw70s7jpW&index=10&ab_channel=TheCodingTrain
-function visualizeAmplitude() {
+https: function draw() {
+  song.setVolume(slider.value() / 100);
+  background(0);
   amphistory.push(amp.getLevel());
-  stroke(contentColor);
+  stroke(255);
   noFill();
 
   translate(width / 2, height / 2);
