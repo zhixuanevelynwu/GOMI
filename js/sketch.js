@@ -1,31 +1,40 @@
-var song;
 var amp;
-var button;
-var score = [];
+var playButton;
+var createCanvasButton;
 var amphistory = [];
+var score = null;
+var playing = false;
+
+/** global score information */
+var notesString = ["c", "d", "e", "f", "g", "a", "b"];
+var selectedCells = [];
+var logicalStopTime = 1;
 
 /** styles */
 var backgroundColor = 0;
 var contentColor = 255;
+
+/** assets */
 var myFont;
+var pianoNote;
 
 function preload() {
   myFont = loadFont("Share_Tech_Mono/ShareTechMono-Regular.ttf");
-  song = loadSound("sounds/song.wav");
+  pianoNote = loadSound("sounds/pianoC4.wav");
 }
 
 function setup() {
   // create an interface to change frequency, waveform, etc.
   let myCanvas = createCanvas(windowWidth * 0.99, windowHeight * 0.9);
-  myCanvas.id("my-canvas");
+  myCanvas.id("my-score");
   angleMode(DEGREES);
   slider = createSlider(0, 100, 100);
-  button = createButton("play/pause");
-  button.mousePressed(toggleSong);
+  playButton = createButton("play");
+  playButton.mousePressed(playScore);
+  createCanvasButton = createButton("new score");
+  createCanvasButton.mousePressed(create);
 
-  song.play();
   amp = new p5.Amplitude();
-  score.push(new Canvas(20));
 
   textFont(myFont);
   textSize(15);
@@ -33,14 +42,14 @@ function setup() {
 }
 
 https: function draw() {
-  song.setVolume(slider.value() / 100);
+  logicalStopTime = slider.value() / 100;
   background(backgroundColor);
   drawScore();
 }
 
 function drawScore() {
-  for (let i = 0; i < score.length; i++) {
-    score[i].drawSelf();
+  if (score) {
+    score.drawSelf();
   }
 }
 
@@ -64,10 +73,25 @@ function visualizeAmplitude() {
   }
 }
 
-function toggleSong() {
-  if (song.isPlaying()) {
-    song.pause();
-  } else {
-    song.play();
+function playScore() {
+  console.log(playing);
+  if (score && !playing) {
+    playing = true;
+    // Schedule the notes
+    selectedCells.forEach((cell) => {
+      setTimeout(() => {
+        for (let i = 0; i < cell.length; i++) {
+          cell[i].play();
+        }
+        console.log(index, selectedCells.length);
+      }, cell.col * logicalStopTime * 1000);
+    });
+  }
+}
+
+function create() {
+  console.log("clicked");
+  if (!score) {
+    score = new Canvas(20);
   }
 }

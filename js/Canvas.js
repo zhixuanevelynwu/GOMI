@@ -1,4 +1,3 @@
-var notesString = ["c", "d", "e", "f", "g", "a", "b"];
 class Canvas {
   constructor(y, startingNote = 3, numNotes = 14) {
     this.x = width * 0.04;
@@ -9,7 +8,7 @@ class Canvas {
     this.cellWidth = 20;
     this.cellHeight = 20;
     this.h = this.cellHeight * this.numNotes;
-    this.grid = [];
+    this.cells = [];
     this.notes = [];
     this.init();
   }
@@ -18,9 +17,10 @@ class Canvas {
     push();
     fill(contentColor);
     noStroke();
-    for (let i = 0; i < this.grid.length; i++) {
+    // Draw cells
+    for (let i = 0; i < this.cells.length; i++) {
       push();
-      stroke(contentColor, 180);
+      stroke(contentColor, 100);
       line(
         this.x,
         this.y + i * this.cellHeight,
@@ -28,16 +28,44 @@ class Canvas {
         this.y + i * this.cellHeight
       );
       pop();
-      for (let j = 0; j < this.grid[i].length; j++) {
-        // fill(255, (205 * i) / this.grid.length, 120, 180);
-        fill(200, 255, 200, 180);
-        this.grid[i][j].drawSelf();
+      for (let j = 0; j < this.cells[i].length; j++) {
+        fill(171, 169, 200, 150);
+        this.cells[i][j].drawSelf();
       }
       fill(contentColor);
       text(this.notes[i], this.x - 20, this.y + i * this.cellHeight);
     }
-    pop();
+
+    // Connect between selected cells
+    stroke(contentColor, 180);
+    let i = 0;
+    let last_i = -1;
+    while (i < selectedCells.length) {
+      let len = selectedCells[i].length;
+      if (len > 0) {
+        for (let j = 0; j < len - 1; j++) {
+          line(
+            selectedCells[i][j].x,
+            selectedCells[i][j].y,
+            selectedCells[i][j + 1].x,
+            selectedCells[i][j + 1].y
+          );
+        }
+        if (last_i >= 0 && last_i != i) {
+          line(
+            selectedCells[last_i][selectedCells[last_i].length - 1].x,
+            selectedCells[last_i][selectedCells[last_i].length - 1].y,
+            selectedCells[i][0].x,
+            selectedCells[i][0].y
+          );
+        }
+        last_i = i;
+      }
+      ++i;
+    }
+
     this.collide();
+    pop();
   }
 
   collide() {
@@ -55,13 +83,35 @@ class Canvas {
 
   init() {
     for (let i = 0; i < this.numNotes; i++) {
-      this.notes.push(notesString[i % 7] + (this.startingNote + floor(i / 7)));
-      this.grid.push([]);
+      let note = notesString[i % 7] + (this.startingNote + floor(i / 7));
+      this.notes.push(note);
+      this.cells.push([]);
       for (let j = 0; j < this.w / this.cellWidth; j++) {
-        this.grid[i].push(
-          new Cell(this.x + j * this.cellWidth, this.y + i * this.cellHeight)
+        this.cells[i].push(
+          new Cell(
+            i,
+            j,
+            this.x + j * this.cellWidth,
+            this.y + i * this.cellHeight,
+            midiToFreq(noteToMidi(note))
+          )
         );
       }
     }
+    for (let j = 0; j < this.w / this.cellWidth; j++) {
+      selectedCells.push([]);
+    }
   }
+}
+
+function noteToMidi(note) {
+  const octave = parseInt(note.slice(-1));
+  const noteLetter = note.slice(0, -1);
+  const noteIndex = notesString.indexOf(noteLetter);
+  if (noteIndex === -1) {
+    console.error("Invalid note letter:", noteLetter);
+    return;
+  }
+  const midiNote = 12 * (octave + 1) + noteIndex;
+  return midiNote;
 }
