@@ -1,5 +1,5 @@
 class Canvas {
-  constructor(y, startingNote = 3, numNotes = 14) {
+  constructor(y, startingNote = 3, numNotes = 14, mode = "osc") {
     this.x = width * 0.04;
     this.y = y;
     this.startingNote = startingNote;
@@ -38,30 +38,13 @@ class Canvas {
 
     // Connect between selected cells
     stroke(contentColor, 180);
-    let i = 0;
-    let last_i = -1;
-    while (i < selectedCells.length) {
-      let len = selectedCells[i].length;
-      if (len > 0) {
-        for (let j = 0; j < len - 1; j++) {
-          line(
-            selectedCells[i][j].x,
-            selectedCells[i][j].y,
-            selectedCells[i][j + 1].x,
-            selectedCells[i][j + 1].y
-          );
-        }
-        if (last_i >= 0 && last_i != i) {
-          line(
-            selectedCells[last_i][selectedCells[last_i].length - 1].x,
-            selectedCells[last_i][selectedCells[last_i].length - 1].y,
-            selectedCells[i][0].x,
-            selectedCells[i][0].y
-          );
-        }
-        last_i = i;
-      }
-      ++i;
+    for (let i = 0; i < selectedCells.length - 1; i++) {
+      line(
+        selectedCells[i].x,
+        selectedCells[i].y,
+        selectedCells[i + 1].x,
+        selectedCells[i + 1].y
+      );
     }
 
     this.collide();
@@ -97,9 +80,6 @@ class Canvas {
           )
         );
       }
-    }
-    for (let j = 0; j < this.w / this.cellWidth; j++) {
-      selectedCells.push([]);
     }
   }
 }

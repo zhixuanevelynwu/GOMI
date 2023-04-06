@@ -80,12 +80,12 @@ function playScore() {
     // Schedule the notes
     selectedCells.forEach((cell) => {
       setTimeout(() => {
-        for (let i = 0; i < cell.length; i++) {
-          cell[i].play();
-        }
-        console.log(index, selectedCells.length);
+        cell.play();
       }, cell.col * logicalStopTime * 1000);
     });
+    setTimeout(() => {
+      playing = false;
+    }, selectedCells.length * logicalStopTime * 1000);
   }
 }
 

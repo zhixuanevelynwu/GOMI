@@ -1,6 +1,6 @@
 var currentCell = null;
 class Cell {
-  constructor(row, col, x, y, freq = 440, waveType = "sine") {
+  constructor(row, col, x, y, freq = 440, waveType = "sine", mode = "osc") {
     this.row = row;
     this.col = col;
     this.x = x;
@@ -61,14 +61,11 @@ function mousePressed() {
     if (currentCell.selected) {
       console.log(currentCell.row, currentCell.col);
       currentCell.selected = false;
-      selectedCells[currentCell.col].splice(
-        selectedCells[currentCell.col].indexOf(currentCell),
-        1
-      );
+      selectedCells.splice(selectedCells.indexOf(currentCell), 1);
     } else {
       currentCell.play();
       currentCell.selected = true;
-      selectedCells[currentCell.col].push(currentCell);
+      sortedInsert(selectedCells, currentCell);
     }
     currentCell = null;
   }
