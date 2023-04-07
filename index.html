@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Computer Music</title>
+    <title>Graphical Composition Tool</title>
 
     <script src="lib/p5.min.js"></script>
     <script src="lib/p5.sound.min.js"></script>
     <!-- also look into tone.js library -->
+    <script src="js/Envelope.js"></script>
     <script src="js/Canvas.js"></script>
     <script src="js/Cell.js"></script>
     <script src="js/sketch.js"></script>
@@ -20,6 +21,32 @@
       }
       body {
         background-color: black;
+      }
+      .p5-slider-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+      }
+      /* Target the slider input element */
+      input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+        background: #eee;
+        height: 1px;
+        width: 50px;
+        border-radius: 4px;
+        outline: none;
+      }
+      /* Target the slider thumb */
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 8px;
+        height: 8px;
+        background: #ffffff;
+        border-radius: 50%;
+        cursor: pointer;
       }
       /* #my-canvas {
         display: block;

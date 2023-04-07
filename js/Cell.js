@@ -57,6 +57,7 @@ class Cell {
 }
 
 function mousePressed() {
+  console.log(mouseX, mouseY);
   if (currentCell && currentCell.collide()) {
     if (currentCell.selected) {
       console.log(currentCell.row, currentCell.col);

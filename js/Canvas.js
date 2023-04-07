@@ -1,5 +1,5 @@
 class Canvas {
-  constructor(y, startingNote = 3, numNotes = 14, mode = "osc") {
+  constructor(y, startingNote = 4, numNotes = 14, mode = "osc") {
     this.x = width * 0.04;
     this.y = y;
     this.startingNote = startingNote;
@@ -37,7 +37,8 @@ class Canvas {
     }
 
     // Connect between selected cells
-    stroke(contentColor, 180);
+    stroke(contentColor, 200);
+    strokeWeight(2);
     for (let i = 0; i < selectedCells.length - 1; i++) {
       line(
         selectedCells[i].x,

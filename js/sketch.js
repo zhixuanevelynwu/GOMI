@@ -2,10 +2,11 @@ var amp;
 var playButton;
 var createCanvasButton;
 var amphistory = [];
-var score = null;
 var playing = false;
 
 /** global score information */
+var score = null;
+var globalEnvelope;
 var notesString = ["c", "d", "e", "f", "g", "a", "b"];
 var selectedCells = [];
 var logicalStopTime = 1;
@@ -28,23 +29,48 @@ function setup() {
   let myCanvas = createCanvas(windowWidth * 0.99, windowHeight * 0.9);
   myCanvas.id("my-score");
   angleMode(DEGREES);
-  slider = createSlider(0, 100, 100);
+  slider = createSlider(0, 100, 50);
+  slider.position(40, 390);
   playButton = createButton("play");
   playButton.mousePressed(playScore);
-  createCanvasButton = createButton("new score");
+  playButton.position(width - 60, height * 0.56);
+
+  createCanvasButton = createButton("create");
   createCanvasButton.mousePressed(create);
+  createCanvasButton.position(width - 60, height * 0.52);
 
   amp = new p5.Amplitude();
 
   textFont(myFont);
   textSize(15);
   textAlign(CENTER, CENTER);
+
+  globalEnvelope = new Envelope(width * 0.2, height * 0.53, 100, 50);
 }
 
 https: function draw() {
   logicalStopTime = slider.value() / 100;
   background(backgroundColor);
+  drawText();
   drawScore();
+  drawEnvelope();
+  visualizeAmplitude();
+}
+
+function drawText() {
+  push();
+  noStroke();
+  textSize(20);
+  fill(contentColor);
+  text("Graphical Composition Tool", width / 2, 50);
+  textSize(12);
+  textAlign(LEFT);
+  text("logical-stop-time: " + slider.value() / 100, 90, 383);
+  pop();
+}
+
+function drawEnvelope() {
+  globalEnvelope.drawSelf();
 }
 
 function drawScore() {
@@ -59,7 +85,7 @@ function visualizeAmplitude() {
   stroke(contentColor);
   noFill();
 
-  translate(width / 2, height / 2);
+  translate(width * 0.1, height * 0.75);
   beginShape();
   for (let i = 0; i < 360; i++) {
     r = map(amphistory[i], 0, 1, 100, 0);
@@ -92,6 +118,6 @@ function playScore() {
 function create() {
   console.log("clicked");
   if (!score) {
-    score = new Canvas(20);
+    score = new Canvas(100);
   }
 }
