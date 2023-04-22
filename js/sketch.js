@@ -220,7 +220,7 @@ function clearCanvas() {
   for (let i = 0; i < selectedCells.length; i++) {
     selectedCells[i].selected = false;
   }
-  selectedCells.splice(0, score.notes.length);
+  selectedCells.splice(0, selectedCells.length);
 }
 
 function changeRadio() {
