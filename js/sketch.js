@@ -7,7 +7,7 @@ var playing = false;
 
 /** global score information */
 var score = null;
-var globalEnvelope;
+var globalADSR;
 var notesString = ["c", "d", "e", "f", "g", "a", "b"];
 var selectedCells = [];
 var logicalStopTime = 1;
@@ -57,7 +57,7 @@ function setup() {
   textSize(15);
   textAlign(CENTER, CENTER);
 
-  globalEnvelope = new Envelope(width * 0.2, height * 0.53, 100, 50);
+  globalADSR = new Envelope(width * 0.25, height * 0.6, 350, 170);
 }
 
 https: function draw() {
@@ -65,7 +65,7 @@ https: function draw() {
   background(backgroundColor);
   drawText();
   drawScore();
-  drawEnvelope();
+  drawADSR();
   // visualizeAmplitude();
   visualizeAmplitudeCircle();
 }
@@ -82,8 +82,8 @@ function drawText() {
   pop();
 }
 
-function drawEnvelope() {
-  globalEnvelope.drawSelf();
+function drawADSR() {
+  globalADSR.drawSelf();
 }
 
 function drawScore() {

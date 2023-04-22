@@ -15,13 +15,21 @@ class Cell {
     this.wave.setType(waveType);
     this.env = new p5.Env();
     // .05s attack, .1s decay, .5 sustain, 1 release
-    this.env.setADSR(0.05, 0.1, 0.5, 1);
-    // .8 attack volume, 0 release (fade all the way out)
-    this.env.setRange(1.2, 0);
+    this.env.setADSR(0.1, 0.1, 0.5, 1);
+    // 1 attack volume, 0 release (fade all the way out)
+    this.env.setRange(1, 0);
   }
 
   play() {
     // set amp and freq only after calling start()
+    this.env.setADSR(
+      globalADSR.attackTime,
+      globalADSR.decayTime,
+      globalADSR.sustainLevel,
+      globalADSR.releaseTime
+    );
+    this.env.setRange(globalADSR.attackLevel, globalADSR.releaseLevel);
+
     this.wave.start();
     this.wave.amp(this.env);
     this.wave.freq(this.freq);
