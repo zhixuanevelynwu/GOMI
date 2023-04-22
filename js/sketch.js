@@ -9,7 +9,8 @@ var playing = false;
 /** global score information */
 var score = null;
 var globalADSR;
-var notesString = ["c", "d", "e", "f", "g", "a", "b"];
+// var notesString = ["c", "d", "e", "f", "g", "a", "b"];
+var notesString = ["b", "a", "g", "f", "e", "d", "c"];
 var selectedCells = [];
 var logicalStopTime = 1;
 

@@ -36,7 +36,8 @@ class Cell {
   drawSelf() {
     if (this.playing) {
       this.r = min(this.r + 1, this.maxR * 1.5);
-      fill("#FBFEF9");
+      // fill("#FBFEF9");
+      fill(this.color);
     } else if (this.selected) {
       fill(this.color);
     }

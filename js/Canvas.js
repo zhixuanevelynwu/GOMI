@@ -1,5 +1,5 @@
 class Canvas {
-  constructor(y, startingNote = 4, numNotes = 14) {
+  constructor(y, startingNote = 5, numNotes = 14) {
     this.x = width * 0.04;
     this.y = y;
     this.startingNote = startingNote;
@@ -67,7 +67,7 @@ class Canvas {
 
   init() {
     for (let i = 0; i < this.numNotes; i++) {
-      let note = notesString[i % 7] + (this.startingNote + floor(i / 7));
+      let note = notesString[i % 7] + (this.startingNote - floor(i / 7));
       this.notes.push(note);
       this.cells.push([]);
       for (let j = 0; j < this.w / this.cellWidth; j++) {
@@ -88,7 +88,7 @@ class Canvas {
 function noteToMidi(note) {
   const octave = parseInt(note.slice(-1));
   const noteLetter = note.slice(0, -1);
-  const noteIndex = notesString.indexOf(noteLetter);
+  const noteIndex = notesString.length - 1 - notesString.indexOf(noteLetter);
   if (noteIndex === -1) {
     console.error("Invalid note letter:", noteLetter);
     return;
