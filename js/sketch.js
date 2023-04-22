@@ -1,6 +1,7 @@
 var amp;
 var playButton;
 var createCanvasButton;
+var clearButton;
 var amphistory = [];
 var playing = false;
 
@@ -29,18 +30,29 @@ function setup() {
   let myCanvas = createCanvas(windowWidth * 0.99, windowHeight * 0.9);
   myCanvas.id("my-score");
   angleMode(DEGREES);
+
+  // ioi control slider
   slider = createSlider(0, 100, 50);
   slider.position(40, 390);
-  playButton = createButton("play");
-  playButton.mousePressed(playScore);
-  playButton.position(width - 60, height * 0.56);
 
+  // create button
   createCanvasButton = createButton("create");
   createCanvasButton.mousePressed(create);
   createCanvasButton.position(width - 60, height * 0.52);
 
+  // play button
+  playButton = createButton("play");
+  playButton.mousePressed(playScore);
+  playButton.position(width - 60, height * 0.56);
+
+  // clear button
+  clearButton = createButton("clear");
+  clearButton.mousePressed(clearCanvas);
+  clearButton.position(width - 60, height * 0.6);
+
   amp = new p5.Amplitude();
 
+  // style
   textFont(myFont);
   textSize(15);
   textAlign(CENTER, CENTER);
@@ -54,7 +66,8 @@ https: function draw() {
   drawText();
   drawScore();
   drawEnvelope();
-  visualizeAmplitude();
+  // visualizeAmplitude();
+  visualizeAmplitudeCircle();
 }
 
 function drawText() {
@@ -81,6 +94,26 @@ function drawScore() {
 
 //www.youtube.com/watch?v=h_aTgOl9J5I&list=PLRqwX-V7Uu6aFcVjlDAkkGIixw70s7jpW&index=10&ab_channel=TheCodingTrain
 function visualizeAmplitude() {
+  push();
+  amphistory.push(amp.getLevel());
+  stroke(contentColor);
+  noFill();
+
+  beginShape();
+  for (let i = 0; i < amphistory.length - 20; i++) {
+    let y = map(amphistory[i], 0, 1, height, height / 2);
+    vertex(i, y);
+  }
+  endShape();
+  if (amphistory.length > width - 20) {
+    amphistory.splice(0, 1);
+  }
+  stroke(255, 150, 150);
+  line(amphistory.length - 20, height / 1.7, amphistory.length - 20, height);
+  pop();
+}
+
+function visualizeAmplitudeCircle() {
   amphistory.push(amp.getLevel());
   stroke(contentColor);
   noFill();
@@ -120,4 +153,11 @@ function create() {
   if (!score) {
     score = new Canvas(100);
   }
+}
+
+function clearCanvas() {
+  for (let i = 0; i < selectedCells.length; i++) {
+    selectedCells[i].selected = false;
+  }
+  selectedCells.splice(0, score.notes.length);
 }

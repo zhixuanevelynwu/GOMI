@@ -32,6 +32,7 @@ class Cell {
     if (this.selected) {
       fill(contentColor);
     }
+
     ellipse(this.x, this.y, this.r, this.r);
     this.collide();
   }
