@@ -2,6 +2,7 @@ var amp;
 var playButton;
 var createCanvasButton;
 var clearButton;
+var myRadio;
 var amphistory = [];
 var playing = false;
 
@@ -19,6 +20,10 @@ var contentColor = 255;
 /** assets */
 var myFont;
 var pianoNote;
+var sineColor = "#D1F0B1";
+var triangleColor = "#8C8A93";
+var sawtoothColor = "#5FB49C";
+var squareColor = "#414288";
 
 function preload() {
   myFont = loadFont("Share_Tech_Mono/ShareTechMono-Regular.ttf");
@@ -27,7 +32,8 @@ function preload() {
 
 function setup() {
   // create an interface to change frequency, waveform, etc.
-  let myCanvas = createCanvas(windowWidth * 0.99, windowHeight * 0.9);
+  let myCanvas = createCanvas(1425, 738);
+  print(width, height);
   myCanvas.id("my-score");
   angleMode(DEGREES);
 
@@ -35,20 +41,32 @@ function setup() {
   slider = createSlider(0, 100, 50);
   slider.position(40, 390);
 
+  // drop down menu
+  myRadio = createRadio();
+  myRadio.option("sine");
+  myRadio.option("triangle");
+  myRadio.option("sawtooth");
+  myRadio.option("square");
+  myRadio.selected("sine");
+  myRadio.position(1090, 400);
+  myRadio.style("color", "white");
+  myRadio.style("background-color", sineColor + "50");
+  myRadio.changed(changeRadio);
+
   // create button
-  createCanvasButton = createButton("create");
+  createCanvasButton = createButton("click to create a score");
   createCanvasButton.mousePressed(create);
-  createCanvasButton.position(width - 60, height * 0.52);
+  createCanvasButton.position(width / 2 - 100, height * 0.3);
 
   // play button
   playButton = createButton("play");
   playButton.mousePressed(playScore);
-  playButton.position(width - 60, height * 0.56);
+  playButton.position(width - 130, height * 0.6);
 
   // clear button
   clearButton = createButton("clear");
   clearButton.mousePressed(clearCanvas);
-  clearButton.position(width - 60, height * 0.6);
+  clearButton.position(width - 130, height * 0.66);
 
   amp = new p5.Amplitude();
 
@@ -57,7 +75,7 @@ function setup() {
   textSize(15);
   textAlign(CENTER, CENTER);
 
-  globalADSR = new Envelope(width * 0.25, height * 0.6, 350, 170);
+  globalADSR = new Envelope(width * 0.25, height * 0.65, 350, 170);
 }
 
 https: function draw() {
@@ -79,6 +97,11 @@ function drawText() {
   textSize(12);
   textAlign(LEFT);
   text("logical-stop-time: " + slider.value() / 100, 90, 383);
+  if (!score) {
+    rectMode(CENTER);
+    fill(contentColor, 20);
+    rect(width / 2, 230, width * 0.95, 280);
+  }
   pop();
 }
 
@@ -152,6 +175,7 @@ function create() {
   console.log("clicked");
   if (!score) {
     score = new Canvas(100);
+    createCanvasButton.hide();
   }
 }
 
@@ -160,4 +184,16 @@ function clearCanvas() {
     selectedCells[i].selected = false;
   }
   selectedCells.splice(0, score.notes.length);
+}
+
+function changeRadio() {
+  if (myRadio.value() == "sine") {
+    myRadio.style("background-color", sineColor + "50");
+  } else if (myRadio.value() == "triangle") {
+    myRadio.style("background-color", triangleColor + "50");
+  } else if (myRadio.value() == "sawtooth") {
+    myRadio.style("background-color", sawtoothColor + "50");
+  } else if (myRadio.value() == "square") {
+    myRadio.style("background-color", squareColor + "50");
+  }
 }

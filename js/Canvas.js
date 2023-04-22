@@ -1,5 +1,5 @@
 class Canvas {
-  constructor(y, startingNote = 4, numNotes = 14, mode = "osc") {
+  constructor(y, startingNote = 4, numNotes = 14) {
     this.x = width * 0.04;
     this.y = y;
     this.startingNote = startingNote;

@@ -1,6 +1,6 @@
 var currentCell = null;
 class Cell {
-  constructor(row, col, x, y, freq = 440, waveType = "sine", mode = "osc") {
+  constructor(row, col, x, y, freq = 440) {
     this.row = row;
     this.col = col;
     this.x = x;
@@ -12,16 +12,12 @@ class Cell {
     this.freq = freq;
     // create sound wave
     this.wave = new p5.Oscillator();
-    this.wave.setType(waveType);
     this.env = new p5.Env();
-    // .05s attack, .1s decay, .5 sustain, 1 release
-    this.env.setADSR(0.1, 0.1, 0.5, 1);
-    // 1 attack volume, 0 release (fade all the way out)
-    this.env.setRange(1, 0);
+    this.wave.setType("sine");
+    this.color = "#C6D8AF";
   }
 
   play() {
-    // set amp and freq only after calling start()
     this.env.setADSR(
       globalADSR.attackTime,
       globalADSR.decayTime,
@@ -38,9 +34,11 @@ class Cell {
 
   drawSelf() {
     if (this.selected) {
-      fill(contentColor);
+      fill(this.color);
+      this.r = 8;
+    } else {
+      this.r = 7;
     }
-
     ellipse(this.x, this.y, this.r, this.r);
     this.collide();
   }
@@ -73,6 +71,22 @@ function mousePressed() {
       currentCell.selected = false;
       selectedCells.splice(selectedCells.indexOf(currentCell), 1);
     } else {
+      // represent different wave types with different colors on canvas
+      switch (myRadio.value()) {
+        case "sine":
+          currentCell.color = sineColor;
+          break;
+        case "triangle":
+          currentCell.color = triangleColor;
+          break;
+        case "sawtooth":
+          currentCell.color = sawtoothColor;
+          break;
+        case "square":
+          currentCell.color = squareColor;
+          break;
+      }
+      currentCell.wave.setType(myRadio.value());
       currentCell.play();
       currentCell.selected = true;
       sortedInsert(selectedCells, currentCell);

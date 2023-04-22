@@ -4,8 +4,8 @@ class Envelope {
     this.y = y;
     this.w = w;
     this.h = h;
-    this.attackTime = 0.05;
-    this.decayTime = 0.1;
+    this.attackTime = 0.1;
+    this.decayTime = 0.2;
     this.sustainTime = 0.5;
     this.releaseTime = 1;
 
@@ -51,20 +51,13 @@ class Envelope {
     this.sustainLevel = this.sustainLevelSlider.value();
     this.releaseLevel = this.releaseLevelSlider.value();
 
-    let t1 = min(this.w, this.w * this.attackTime);
+    let t1 = this.w * this.attackTime;
     let l1 = -this.h * this.attackLevel;
-    let t2 = min(this.w, this.w * (this.attackTime + this.decayTime));
+    let t2 = max(this.w * this.decayTime, t1);
     let l2 = -this.h * this.sustainLevel;
-    let t3 = min(
-      this.w,
-      this.w * (this.attackTime + this.sustainTime + this.decayTime)
-    );
+    let t3 = max(this.w * this.sustainTime, t2);
     let l3 = l2;
-    let t4 = min(
-      this.w,
-      this.w *
-        (this.attackTime + this.sustainTime + this.decayTime + this.releaseTime)
-    );
+    let t4 = max(this.w * this.releaseTime, t3);
     let l4 = -this.h * this.releaseLevel;
 
     push();
