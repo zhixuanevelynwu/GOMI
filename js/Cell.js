@@ -13,7 +13,8 @@ class Cell {
     // create sound wave
     this.wave = new p5.Oscillator();
     this.env = new p5.Env();
-    this.wave.setType("sine");
+    this.waveType = "sine";
+    this.wave.setType(this.waveType);
     this.color = "#C6D8AF";
     this.playing = false;
   }
@@ -90,7 +91,8 @@ function mousePressed() {
           currentCell.color = squareColor;
           break;
       }
-      currentCell.wave.setType(myRadio.value());
+      currentCell.waveType = myRadio.value();
+      currentCell.wave.setType(this.waveType);
       currentCell.play();
       currentCell.selected = true;
       sortedInsert(selectedCells, currentCell);

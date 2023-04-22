@@ -1,6 +1,8 @@
 var amp;
+var fft;
 var playButton;
 var createCanvasButton;
+var generateScoreButton;
 var clearButton;
 var myRadio;
 var amphistory = [];
@@ -61,17 +63,26 @@ function setup() {
   createCanvasButton.position(width / 2 - 100, height * 0.3);
 
   // play button
+  var buttonX = width - 260;
   playButton = createButton("play");
   playButton.mousePressed(playScore);
-  playButton.position(width - 130, height * 0.6);
+  playButton.position(buttonX, height * 0.66);
   playButton.hide();
 
   // clear button
   clearButton = createButton("clear");
   clearButton.mousePressed(clearCanvas);
-  clearButton.position(width - 130, height * 0.66);
+  clearButton.position(buttonX, height * 0.74);
   clearButton.hide();
 
+  // generate score button
+  generateScoreButton = createButton("generate nyquist score");
+  generateScoreButton.mousePressed(generateScore);
+  generateScoreButton.position(buttonX, height * 0.82);
+  generateScoreButton.hide();
+
+  // fft and amp
+  fft = new p5.FFT(0, 32);
   amp = new p5.Amplitude();
 
   // style
@@ -90,6 +101,32 @@ https: function draw() {
   drawADSR();
   // visualizeAmplitude();
   visualizeAmplitudeCircle();
+  visualizeFFT();
+}
+
+// I completed part of this function following this tutorial
+// https://www.youtube.com/watch?v=2O3nm0Nvbi4&ab_channel=TheCodingTrain
+function visualizeFFT() {
+  push();
+  translate(width * 0.65, 310);
+
+  var spectrum = fft.analyze();
+  noStroke();
+  fill(0, 255, 0);
+  fftWidth = 200;
+  fftHeight = 170;
+
+  for (var i = 0; i < spectrum.length; i++) {
+    var x = map(i, 0, spectrum.length, 0, fftWidth);
+    var h = map(spectrum[i], 0, 255, fftHeight, 0);
+    rect(x, fftHeight, fftWidth / spectrum.length, h);
+  }
+
+  noStroke();
+  fill(0, 0, 0);
+  textSize(12);
+  text("frequency", fftWidth - 40, fftHeight + 10);
+  pop();
 }
 
 function drawText() {
@@ -119,30 +156,11 @@ function drawScore() {
   }
 }
 
+// I completed part of this function following this tutorial
 //www.youtube.com/watch?v=h_aTgOl9J5I&list=PLRqwX-V7Uu6aFcVjlDAkkGIixw70s7jpW&index=10&ab_channel=TheCodingTrain
-function visualizeAmplitude() {
-  push();
-  amphistory.push(amp.getLevel());
-  stroke(contentColor);
-  noFill();
-
-  beginShape();
-  for (let i = 0; i < amphistory.length - 20; i++) {
-    let y = map(amphistory[i], 0, 1, height, height / 2);
-    vertex(i, y);
-  }
-  endShape();
-  if (amphistory.length > width - 20) {
-    amphistory.splice(0, 1);
-  }
-  stroke(255, 150, 150);
-  line(amphistory.length - 20, height / 1.7, amphistory.length - 20, height);
-  pop();
-}
-
 function visualizeAmplitudeCircle() {
   amphistory.push(amp.getLevel());
-
+  push();
   translate(width * 0.1, height * 0.75);
   push();
   noStroke();
@@ -163,6 +181,7 @@ function visualizeAmplitudeCircle() {
   if (amphistory.length > 360) {
     amphistory.splice(0, 1);
   }
+  pop();
 }
 
 function playScore() {
@@ -193,6 +212,7 @@ function create() {
     myRadio.show();
     playButton.show();
     clearButton.show();
+    generateScoreButton.show();
   }
 }
 
@@ -213,4 +233,31 @@ function changeRadio() {
   } else if (myRadio.value() == "square") {
     myRadio.style("background-color", squareColor + "50");
   }
+}
+
+function generateScore() {
+  let fileName = "score.txt";
+  let fileContent = "{\n";
+
+  // construct the score in nyquist format
+  // {0 1 {note pitch: c2}}
+  for (let i = selectedCells.length - 1; i >= 0; i--) {
+    let startTime = selectedCells[i].col * logicalStopTime;
+    let dur = logicalStopTime;
+    let instr = selectedCells[i].waveType + "-instr";
+    let pitch = score.notes[selectedCells[i].row];
+    fileContent += ` {${startTime} ${dur} {${instr} pitch: ${pitch}}} \n`;
+  }
+
+  fileContent += "}";
+
+  let fileBlob = new Blob([fileContent], { type: "text/plain" });
+  let fileUrl = URL.createObjectURL(fileBlob);
+  let link = document.createElement("a");
+  link.download = fileName;
+  link.href = fileUrl;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(fileUrl);
 }
