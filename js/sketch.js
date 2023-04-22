@@ -52,6 +52,7 @@ function setup() {
   myRadio.style("color", "white");
   myRadio.style("background-color", sineColor + "50");
   myRadio.changed(changeRadio);
+  myRadio.hide();
 
   // create button
   createCanvasButton = createButton("click to create a score");
@@ -62,11 +63,13 @@ function setup() {
   playButton = createButton("play");
   playButton.mousePressed(playScore);
   playButton.position(width - 130, height * 0.6);
+  playButton.hide();
 
   // clear button
   clearButton = createButton("clear");
   clearButton.mousePressed(clearCanvas);
   clearButton.position(width - 130, height * 0.66);
+  clearButton.hide();
 
   amp = new p5.Amplitude();
 
@@ -138,10 +141,16 @@ function visualizeAmplitude() {
 
 function visualizeAmplitudeCircle() {
   amphistory.push(amp.getLevel());
-  stroke(contentColor);
-  noFill();
 
   translate(width * 0.1, height * 0.75);
+  push();
+  noStroke();
+  fill(contentColor);
+  text("amplitude", 0, 0);
+  pop();
+
+  stroke(contentColor);
+  noFill();
   beginShape();
   for (let i = 0; i < 360; i++) {
     r = map(amphistory[i], 0, 1, 100, 0);
@@ -163,6 +172,10 @@ function playScore() {
     selectedCells.forEach((cell) => {
       setTimeout(() => {
         cell.play();
+        cell.playing = true;
+        setTimeout(() => {
+          cell.playing = false;
+        }, logicalStopTime * 1000);
       }, cell.col * logicalStopTime * 1000);
     });
     setTimeout(() => {
@@ -176,6 +189,9 @@ function create() {
   if (!score) {
     score = new Canvas(100);
     createCanvasButton.hide();
+    myRadio.show();
+    playButton.show();
+    clearButton.show();
   }
 }
 

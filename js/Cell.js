@@ -15,6 +15,7 @@ class Cell {
     this.env = new p5.Env();
     this.wave.setType("sine");
     this.color = "#C6D8AF";
+    this.playing = false;
   }
 
   play() {
@@ -33,11 +34,11 @@ class Cell {
   }
 
   drawSelf() {
-    if (this.selected) {
+    if (this.playing) {
+      this.r = min(this.r + 1, this.maxR * 1.5);
+      fill("#FBFEF9");
+    } else if (this.selected) {
       fill(this.color);
-      this.r = 8;
-    } else {
-      this.r = 7;
     }
     ellipse(this.x, this.y, this.r, this.r);
     this.collide();
@@ -49,7 +50,9 @@ class Cell {
       currentCell = this;
       return true;
     }
-    this.r = this.minR;
+    if (!this.playing) {
+      this.r = max(this.r - 1, this.minR);
+    }
     return false;
   }
 
