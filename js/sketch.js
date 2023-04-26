@@ -56,7 +56,7 @@ function setup() {
 
   // ioi control slider
   slider = createSlider(0, 100, 50);
-  slider.position(40, 390);
+  slider.position(40, 405);
 
   // drop down menu
   myRadio = createRadio();
@@ -148,7 +148,7 @@ function drawText() {
   noStroke();
   textSize(20);
   fill(contentColor);
-  text("Graphical Composition Tool", width / 2, 50);
+  text("Graphical Online Music Interface", width / 2, 50);
   textSize(12);
   textAlign(LEFT);
   text("logical-stop-time: " + slider.value() / 100, 90, 383);

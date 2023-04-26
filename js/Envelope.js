@@ -15,9 +15,9 @@ class Envelope {
 
     // create sliders
     this.sliderX = this.x + this.w + 20;
-    this.sliderY = this.y + 20;
+    this.sliderY = this.y + 40;
     this.sliderTextX = this.sliderX + 50;
-    this.sliderTextY = this.sliderY - 7;
+    this.sliderTextY = this.sliderY - 25;
 
     this.attackSlider = createSlider(0, 1, this.attackTime, 0.01);
     this.attackSlider.position(this.sliderX, this.sliderY);
