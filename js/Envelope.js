@@ -14,10 +14,10 @@ class Envelope {
     this.releaseLevel = 0;
 
     // create sliders
-    this.sliderX = myCanvas.position().x + this.x + this.w + 10;
-    this.sliderY = myCanvas.position().y + this.y + 10;
-    this.sliderTextX = this.sliderX + 55;
-    this.sliderTextY = this.sliderY - 40;
+    this.sliderX = this.x + this.w + 20;
+    this.sliderY = this.y + 40;
+    this.sliderTextX = this.sliderX + 50;
+    this.sliderTextY = this.sliderY - 25;
 
     this.attackSlider = createSlider(0, 1, this.attackTime, 0.01);
     this.attackSlider.position(this.sliderX, this.sliderY);

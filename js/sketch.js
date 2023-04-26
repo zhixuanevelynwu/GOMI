@@ -7,7 +7,6 @@ var clearButton;
 var myRadio;
 var amphistory = [];
 var playing = false;
-var myCanvas;
 
 /** global score information */
 var score = null;
@@ -50,14 +49,14 @@ function preload() {
 
 function setup() {
   // create an interface to change frequency, waveform, etc.
-  myCanvas = createCanvas(1425, 738);
+  let myCanvas = createCanvas(1425, 738);
   print(width, height);
   myCanvas.id("my-score");
   angleMode(DEGREES);
 
   // ioi control slider
   slider = createSlider(0, 100, 50);
-  slider.position(myCanvas.position().x + 60, myCanvas.position().y + 382);
+  slider.position(40, 405);
 
   // drop down menu
   myRadio = createRadio();
@@ -66,7 +65,7 @@ function setup() {
   myRadio.option("sawtooth");
   myRadio.option("square");
   myRadio.selected("sine");
-  myRadio.position(myCanvas.position().x + 1110, myCanvas.position().y + 380);
+  myRadio.position(1090, 400);
   myRadio.style("color", "white");
   myRadio.style("background-color", sineColor + "50");
   myRadio.changed(changeRadio);
@@ -75,38 +74,25 @@ function setup() {
   // create button
   createCanvasButton = createButton("click to create a score");
   createCanvasButton.mousePressed(create);
-  createCanvasButton.position(
-    myCanvas.position().x + width / 2,
-    myCanvas.position().y + height * 0.28
-  );
+  createCanvasButton.position(width / 2 - 100, height * 0.3);
 
   // play button
-  var buttonX = width - 150;
-  var buttonY = height - 100;
+  var buttonX = width - 260;
   playButton = createButton("play");
   playButton.mousePressed(playScore);
-  playButton.position(
-    myCanvas.position().x + buttonX,
-    myCanvas.position().x + buttonY
-  );
+  playButton.position(buttonX, height * 0.66);
   playButton.hide();
 
   // clear button
   clearButton = createButton("clear");
   clearButton.mousePressed(clearCanvas);
-  clearButton.position(
-    myCanvas.position().x + buttonX,
-    myCanvas.position().x + buttonY + 50
-  );
+  clearButton.position(buttonX, height * 0.74);
   clearButton.hide();
 
   // generate score button
   generateScoreButton = createButton("generate nyquist score");
   generateScoreButton.mousePressed(generateScore);
-  generateScoreButton.position(
-    myCanvas.position().x + buttonX,
-    myCanvas.position().x + buttonY + 100
-  );
+  generateScoreButton.position(buttonX, height * 0.82);
   generateScoreButton.hide();
 
   // fft and amp
