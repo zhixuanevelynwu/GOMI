@@ -56,7 +56,7 @@ function setup() {
 
   // ioi control slider
   slider = createSlider(0, 100, 50);
-  slider.position(40, 405);
+  slider.position(40, 390);
 
   // drop down menu
   myRadio = createRadio();
