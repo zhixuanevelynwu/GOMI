@@ -66,8 +66,8 @@ class Canvas {
   }
 
   init() {
-    for (let i = 0; i < this.numNotes; i++) {
-      let note = notesString[i % 7] + (this.startingNote - floor(i / 7));
+    for (let i = 0; i < Object.keys(notes).length; i++) {
+      let note = Object.keys(notes)[i];
       this.notes.push(note);
       this.cells.push([]);
       for (let j = 0; j < this.w / this.cellWidth; j++) {
@@ -82,17 +82,10 @@ class Canvas {
         );
       }
     }
+    // console.log(this.notes);
   }
 }
 
 function noteToMidi(note) {
-  const octave = parseInt(note.slice(-1));
-  const noteLetter = note.slice(0, -1);
-  const noteIndex = notesString.length - 1 - notesString.indexOf(noteLetter);
-  if (noteIndex === -1) {
-    console.error("Invalid note letter:", noteLetter);
-    return;
-  }
-  const midiNote = 12 * (octave + 1) + noteIndex;
-  return midiNote;
+  return notes[note];
 }

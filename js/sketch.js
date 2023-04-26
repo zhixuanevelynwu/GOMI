@@ -11,8 +11,23 @@ var playing = false;
 /** global score information */
 var score = null;
 var globalADSR;
-// var notesString = ["c", "d", "e", "f", "g", "a", "b"];
-var notesString = ["b", "a", "g", "f", "e", "d", "c"];
+var notes = {
+  d5: 73,
+  c5: 72,
+  b4: 71,
+  "a#4": 70,
+  a4: 69,
+  "g#4": 68,
+  g4: 67,
+  "f#4": 66,
+  f4: 65,
+  "e#4": 64,
+  "d#4": 63,
+  d4: 62,
+  "c#4": 61,
+  c4: 60,
+};
+
 var selectedCells = [];
 var logicalStopTime = 1;
 
@@ -23,14 +38,13 @@ var contentColor = 255;
 /** assets */
 var myFont;
 var pianoNote;
-var sineColor = "#D1F0B1";
-var triangleColor = "#8C8A93";
+var sineColor = "#FFFFFF";
+var triangleColor = "#68A357";
 var sawtoothColor = "#5FB49C";
 var squareColor = "#414288";
 
 function preload() {
   myFont = loadFont("Share_Tech_Mono/ShareTechMono-Regular.ttf");
-  pianoNote = loadSound("sounds/pianoC4.wav");
 }
 
 function setup() {
@@ -185,7 +199,7 @@ function visualizeAmplitudeCircle() {
 }
 
 function playScore() {
-  console.log(playing);
+  // console.log(playing);
   if (score && !playing) {
     playing = true;
     // Schedule the notes
@@ -205,7 +219,7 @@ function playScore() {
 }
 
 function create() {
-  console.log("clicked");
+  // console.log("clicked");
   if (!score) {
     score = new Canvas(100);
     createCanvasButton.hide();
@@ -245,8 +259,10 @@ function generateScore() {
     let startTime = selectedCells[i].col * logicalStopTime;
     let dur = logicalStopTime;
     let instr = selectedCells[i].waveType + "-instr";
-    let pitch = score.notes[selectedCells[i].row];
-    fileContent += ` {${startTime} ${dur} {${instr} pitch: ${pitch}}} \n`;
+    let pitch = notes[score.notes[selectedCells[i].row]];
+    fileContent += ` {${startTime.toFixed(
+      2
+    )} ${dur} {${instr} pitch: ${pitch}}} \n`;
   }
 
   fileContent += "}";

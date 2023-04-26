@@ -27,7 +27,7 @@ class Cell {
       globalADSR.releaseTime
     );
     this.env.setRange(globalADSR.attackLevel, globalADSR.releaseLevel);
-
+    this.wave.setType(this.waveType);
     this.wave.start();
     this.wave.amp(this.env);
     this.wave.freq(this.freq);
@@ -69,10 +69,10 @@ class Cell {
 }
 
 function mousePressed() {
-  console.log(mouseX, mouseY);
+  // console.log(mouseX, mouseY);
   if (currentCell && currentCell.collide()) {
     if (currentCell.selected) {
-      console.log(currentCell.row, currentCell.col);
+      // console.log(currentCell.row, currentCell.col);
       currentCell.selected = false;
       selectedCells.splice(selectedCells.indexOf(currentCell), 1);
     } else {
@@ -92,7 +92,6 @@ function mousePressed() {
           break;
       }
       currentCell.waveType = myRadio.value();
-      currentCell.wave.setType(this.waveType);
       currentCell.play();
       currentCell.selected = true;
       sortedInsert(selectedCells, currentCell);
