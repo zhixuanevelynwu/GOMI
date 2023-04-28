@@ -16,7 +16,7 @@
 
 ---
 
-<p align="center"> Few lines describing your project.
+<p align="center"> An interactive composition tool
     <br> 
 </p>
 
