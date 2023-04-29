@@ -36,9 +36,6 @@ class Envelope {
 
     this.sustainLevelSlider = createSlider(0, 1, this.sustainLevel, 0.01);
     this.sustainLevelSlider.position(this.sliderX, this.sliderY + 120);
-
-    this.releaseLevelSlider = createSlider(0, 1, this.releaseLevel, 0.01);
-    this.releaseLevelSlider.position(this.sliderX, this.sliderY + 140);
   }
 
   drawSelf() {
@@ -49,7 +46,6 @@ class Envelope {
 
     this.attackLevel = this.attackLevelSlider.value();
     this.sustainLevel = this.sustainLevelSlider.value();
-    this.releaseLevel = this.releaseLevelSlider.value();
 
     let t1 = this.w * this.attackTime;
     let l1 = -this.h * this.attackLevel;
@@ -109,11 +105,6 @@ class Envelope {
       "sustainLevel: " + this.sustainLevelSlider.value(),
       this.sliderTextX,
       this.sliderTextY + 120
-    );
-    text(
-      "releaseLevel: " + this.releaseLevelSlider.value(),
-      this.sliderTextX,
-      this.sliderTextY + 140
     );
 
     pop();
